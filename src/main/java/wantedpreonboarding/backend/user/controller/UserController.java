@@ -1,5 +1,6 @@
 package wantedpreonboarding.backend.user.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,14 @@ public class UserController {
 
     private final UserService userService;
 
+    @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity signup(@Validated @RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
         return new ResponseEntity(new ApiResponse(SuccessCode.SIGNUP_SUCCESS), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity login(@Validated @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);

@@ -21,7 +21,8 @@ public enum ErrorCode {
     WRONG_PASSWORD(400, "U004", "비밀번호가 틀렸습니다."),
     NOT_FOUND_USER(404, "U005", "유저를 찾을 수 없습니다."),
     NO_MATCHES_INFO(400, "U006", "토큰의 유저 정보가 일치하지 않습니다."),
-    NO_MATCHES_PASSWORD(400, "U007", "비밀번호가 일치하지 않습니다.");
+    NO_MATCHES_PASSWORD(400, "U007", "비밀번호가 일치하지 않습니다."),
+    NOT_FOUND_POST(404, "P001", "게시물을 찾을 수 없습니다.");
 
 
     //에러의 코드 상태 반환

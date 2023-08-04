@@ -8,7 +8,8 @@ public enum SuccessCode {
     SIGNUP_SUCCESS("SignUp", "회원가입에 성공하였습니다."),
     CAN_USE_EMAIL("CanUseEmail", "사용 가능한 이메일 입니다."),
     DELETE_USER("DeleteUser", "회원이 삭제되었습니다."),
-    LOGOUT("Logout", "로그아웃 되었습니다.");
+    LOGOUT("Logout", "로그아웃 되었습니다."),
+    DELETE_POST("Delete", "게시물이 삭제되었습니다.");
 
 
     private final String code;

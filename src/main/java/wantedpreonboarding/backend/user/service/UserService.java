@@ -31,6 +31,11 @@ public class UserService {
     private final RedisUtil redisUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> {throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);});
+    }
+
     // 회원가입
     public void signup(SignupRequest signupRequest) {
         userRepository.findByEmail(signupRequest.getEmail())
@@ -44,6 +49,7 @@ public class UserService {
     }
 
 
+    // 로그인
     public LoginResponse login(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
