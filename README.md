@@ -30,7 +30,8 @@ Infra
 
 ## 데이터 베이스 테이블 구조(ERD)
 
-![image](https://github.com/gunhee93/wanted-pre-onboarding-backend/assets/123151812/098542f5-2fd8-423e-b2da-0c5c3dc061d0)
+![image](https://github.com/gunhee93/wanted-pre-onboarding-backend/assets/123151812/babbbbca-e71c-4463-9495-e632cef12c2c)
+
 
 ## 데모 영상
 
