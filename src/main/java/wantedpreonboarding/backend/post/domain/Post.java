@@ -6,15 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import wantedpreonboarding.backend.post.dto.UpdatePostRequest;
 import wantedpreonboarding.backend.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "POSTS")
 public class Post {
@@ -36,8 +37,9 @@ public class Post {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public Post(User user, String title,
+    public Post(Long id, User user, String title,
                 String content, Long view_count, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
@@ -52,14 +54,20 @@ public class Post {
                 .title(title)
                 .content(content)
                 .user(user)
+                .view_count(0L)
                 .build();
     }
 
     // 게시글 수정
-    public static Post updatePost(String title, String content) {
+    public Post updatePost(UpdatePostRequest updatePostRequest) {
         return Post.builder()
-                .title(title)
-                .content(title)
+                .id(this.id)
+                .user(this.user)
+                .title(updatePostRequest.getTitle() != null ? updatePostRequest.getTitle() : this.title)
+                .content(updatePostRequest.getContent() != null ? updatePostRequest.getContent() : this.content)
+                .createdAt(this.createdAt)
+                .view_count(this.view_count)
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
 

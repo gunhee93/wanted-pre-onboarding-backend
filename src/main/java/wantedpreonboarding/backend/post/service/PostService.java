@@ -68,14 +68,13 @@ public class PostService {
                 findPost.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm")));
     }
 
-    public UpdatePostResponse updatePost(UpdatePostRequest updatePostRequest) {
-        String updatedTitle = updatePostRequest.getTitle();
-        String updatedContent = updatePostRequest.getContent();
+    public UpdatePostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest) {
 
-        Post post = findById(updatePostRequest.getPostId());
-        post.updatePost(updatedTitle, updatedContent);
+        Post post = findById(postId);
+        Post updatePost = post.updatePost(updatePostRequest);
+        postRepository.save(updatePost);
 
-        return new UpdatePostResponse(updatedTitle, updatedContent);
+        return new UpdatePostResponse(updatePostRequest.getTitle(), updatePostRequest.getContent());
     }
 
     public void deletePost(Long postId) {

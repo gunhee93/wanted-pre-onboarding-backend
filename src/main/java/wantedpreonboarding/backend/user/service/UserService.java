@@ -61,4 +61,50 @@ public class UserService {
         return new LoginResponse(
                 tokenResponse.getAccessToken(), tokenResponse.getRefreshToken(), tokenResponse.getAccessTokenExpiresIn());
     }
+
+    public TokenResponse reissue(String acTokenRequest, String rfTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        String findRefreshToken = redisUtil.getData(userId);
+        if (findRefreshToken == null) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        if (!refreshToken.equals(findRefreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHES_INFO);
+        }
+
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+        redisUtil.setDataExpire(userId, tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        return tokenResponse;
+    }
+
+    public void logout(String acTokenRequest, String rfTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        String findRefreshToken = redisUtil.getData(userId);
+        if (findRefreshToken != null) {
+            redisUtil.deleteData(userId);
+        }
+        Long expiration = tokenProvider.getExpiration(accessToken);
+
+        redisUtil.setDataExpire(accessToken, "logout", expiration);
+    }
 }
